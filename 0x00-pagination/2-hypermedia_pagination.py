@@ -1,21 +1,10 @@
 #!/usr/bin/env python3
 """
-Contains:
-    Classes
-    =======
-    Server - Mock server that hosts a dataset and is able to
-    service requests for that dataset with pagination and a method
-    that offers hypermedia pagination
-
-    Functions
-    =========
-    index_range - Helper function that receives page number and
-    page size and returns the appropriate range if indexes to return
-    from the dataset
+Contains class with methods to create simple pagination from csv data
 """
 import csv
-import math
-from typing import List, Mapping, Tuple
+from typing import List
+index_range = __import__('0-simple_helper_function').index_range
 
 
 class Server:
@@ -27,7 +16,10 @@ class Server:
         self.__dataset = None
 
     def dataset(self) -> List[List]:
-        """Cached dataset
+        """
+        Reads from csv file and returns the dataset.
+        Returns:
+            List[List]: The dataset.
         """
         if self.__dataset is None:
             with open(self.DATA_FILE) as f:
@@ -37,22 +29,26 @@ class Server:
 
         return self.__dataset
 
+    @staticmethod
+    def assert_positive_integer_type(value: int) -> None:
+        """
+        Asserts that the value is a positive integer.
+        Args:
+            value (int): The value to be asserted.
+        """
+        assert type(value) is int and value > 0
+
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
-        Receives a page number and the page size and returns the appropriate
-        page from the dataset (correct list of rows)
-
+        Returns a page of the dataset.
         Args:
-            page (int): The page number to retrieve
-            page_size (int): THe number of records / rows of the dataset
-            to be returned at a time
-
+            page (int): The page number.
+            page_size (int): The page size.
         Returns:
-            (list): The appropriate rows of the dataset corresponding to given
-            pagination parameters
+            List[List]: The page of the dataset.
         """
-        assert isinstance(page, int) and page > 0
-        assert isinstance(page_size, int) and page_size > 0
+        self.assert_positive_integer_type(page)
+        self.assert_positive_integer_type(page_size)
         dataset = self.dataset()
         start, end = index_range(page, page_size)
         try:
@@ -61,35 +57,23 @@ class Server:
             data = []
         return data
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> Mapping:
-        dataset = self.dataset()
-        rows = self.get_page(page=page, page_size=page_size)
-        max_page_num = len(dataset) // page_size + 1
-        return {
-            "page_size": page_size if page_size <= len(rows) else len(rows),
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
+        """
+        Returns a page of the dataset.
+        Args:
+            page (int): The page number.
+            page_size (int): The page size.
+        Returns:
+            List[List]: The page of the dataset.
+        """
+        total_pages = len(self.dataset()) // page_size + 1
+        data = self.get_page(page, page_size)
+        info = {
             "page": page,
-            "data": rows,
-            "next_page": page + 1 if page + 1 <= max_page_num else None,
-            "prev_page": page - 1 if page - 1 > 0 else None,
-            "total_pages": max_page_num
+            "page_size": page_size if page_size <= len(data) else len(data),
+            "total_pages": total_pages,
+            "data": data,
+            "prev_page": page - 1 if page > 1 else None,
+            "next_page": page + 1 if page + 1 <= total_pages else None
         }
-
-
-def index_range(page: int, page_size: int) -> Tuple[int, int]:
-    """
-    A helper function for pagination that receives
-    a page number and page size, and returns the start and end index
-    for that page.
-
-    Args:
-        page (int): The page number
-        page_size (int): The amount of records that can be displayed
-        at a time
-
-    Returns:
-        (tuple): The start and end index for the records to be displayed
-        on the page
-    """
-    start_index = (page - 1) * page_size
-    end_index = start_index + page_size
-    return (start_index, end_index)
+        return info
