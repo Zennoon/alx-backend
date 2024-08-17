@@ -64,14 +64,17 @@ class Server:
         return data
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
+        """
+        Returns hypermedia representation
+        """
         dataset = self.dataset()
-        rows = self.get_page(page=page, page_size=page_size)
+        rows = self.get_page(page, page_size)
         max_page_num = len(dataset) // page_size + 1
         return {
             "page_size": page_size if page_size <= len(rows) else len(rows),
             "page": page,
             "data": rows,
             "next_page": page + 1 if page + 1 <= max_page_num else None,
-            "prev_page": page - 1 if page - 1 > 0 else None,
+            "prev_page": page - 1 if page - 1 else None,
             "total_pages": max_page_num
         }
