@@ -68,7 +68,7 @@ class Server:
             "page_size": len(rows),
             "page": page,
             "data": rows,
-            "next_page": page + 1 if page + 1 <= max_page_num else None,
+            "next_page": page if page + 1 <= max_page_num else None,
             "prev_page": page - 1 if page - 1 > 0 else None,
             "total_pages": max_page_num
         }
