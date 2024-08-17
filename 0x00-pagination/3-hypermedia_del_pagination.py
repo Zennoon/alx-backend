@@ -59,7 +59,7 @@ class Server:
         index = index or 0
         assert (isinstance(index, int)
                 and index >= 0
-                and index < len(dataset))
+                and index < len(dataset) + page_size)
         idx = index
         data: List[List] = []
         while idx < len(dataset):
