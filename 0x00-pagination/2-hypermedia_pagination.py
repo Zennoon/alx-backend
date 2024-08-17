@@ -62,18 +62,8 @@ class Server:
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Mapping:
         dataset = self.dataset()
-        try:
-            rows = self.get_page(page=page, page_size=page_size)
-        except AssertionError:
-            return {
-                "page_size": 0,
-                "page": page,
-                "data": [],
-                "next_page": None,
-                "prev_page": None,
-                "total_pages": None
-            }
-        max_page_num = math.ceil(len(dataset) // page_size)
+        rows = self.get_page(page=page, page_size=page_size)
+        max_page_num = len(dataset) // page_size + 1
         return {
             "page_size": len(rows),
             "page": page,
