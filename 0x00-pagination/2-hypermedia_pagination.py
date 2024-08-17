@@ -53,8 +53,9 @@ class Server:
         """
         assert isinstance(page, int) and page > 0
         assert isinstance(page_size, int) and page_size > 0
-        start, end = index_range(page, page_size)
         dataset = self.dataset()
+        start, end = index_range(page, page_size)
+        end = end if end <= len(dataset) else len(dataset)
         rows = []
         if start < len(dataset) and end <= len(dataset):
             rows = dataset[start:end]
@@ -70,7 +71,7 @@ class Server:
             "data": rows,
             "next_page": page + 1 if page + 1 <= max_page_num else None,
             "prev_page": page - 1 if page - 1 > 0 else None,
-            "total_page": max_page_num
+            "total_pages": max_page_num
         }
 
 
