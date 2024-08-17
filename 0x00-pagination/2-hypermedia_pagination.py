@@ -57,11 +57,10 @@ class Server:
         assert isinstance(page_size, int) and page_size > 0
         dataset = self.dataset()
         start, end = index_range(page, page_size)
-        try:
-            data = dataset[start:end]
-        except IndexError:
-            data = []
-        return data
+        rows = []
+        if start < len(dataset) and end <= len(dataset):
+            rows = dataset[start:end]
+        return rows
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
         """
@@ -69,7 +68,7 @@ class Server:
         """
         dataset = self.dataset()
         rows = self.get_page(page, page_size)
-        max_page_num = len(dataset) // page_size + 1
+        max_page_num = math.ceil(len(dataset) // page_size)
         return {
             "page_size": page_size if page_size <= len(rows) else len(rows),
             "page": page,
