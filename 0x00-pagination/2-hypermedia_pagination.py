@@ -70,7 +70,7 @@ class Server:
                 "page": page,
                 "data": [],
                 "next_page": None,
-                "pre_page": None,
+                "prev_page": None,
                 "total_pages": None
             }
         max_page_num = math.ceil(len(dataset) // page_size)
