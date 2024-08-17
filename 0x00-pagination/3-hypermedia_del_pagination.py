@@ -45,7 +45,16 @@ class Server:
     def get_hyper_index(self,
                         index: Union[int, None] = None,
                         page_size: int = 10) -> Dict:
-        """Placeholder for documentation"""
+        """
+        Retrieves items from the dataset with delete resiliency
+        
+        Args:
+            index (int): The start index from which to retrieve data
+            page_size (int): Size of the page
+
+        Returns:
+            dict: Dictionary containing hypermedia
+        """
         dataset = self.indexed_dataset()
         index = index or 0
         assert (isinstance(index, int)
