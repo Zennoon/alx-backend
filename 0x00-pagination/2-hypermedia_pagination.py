@@ -70,7 +70,7 @@ class Server:
             "data": rows,
             "next_page": page + 1 if page + 1 <= max_page_num else None,
             "prev_page": page - 1 if page - 1 > 0 else None,
-            "total_pages": max_page_num
+            "total_pages": max_page_num + 1
         }
 
 
