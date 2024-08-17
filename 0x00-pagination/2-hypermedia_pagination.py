@@ -55,10 +55,11 @@ class Server:
         assert isinstance(page_size, int) and page_size > 0
         dataset = self.dataset()
         start, end = index_range(page, page_size)
-        rows = []
-        if start < len(dataset) and end <= len(dataset):
-            rows = dataset[start:end]
-        return rows
+        try:
+            data = dataset[start:end]
+        except IndexError:
+            data = []
+        return data
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Mapping:
         dataset = self.dataset()
