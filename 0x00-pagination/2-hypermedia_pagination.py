@@ -19,6 +19,7 @@ from typing import List, Mapping, Tuple
 
 index_range = __import__('0-simple_helper_function').index_range
 
+
 class Server:
     """Server class to paginate a database of popular baby names.
     """
@@ -62,7 +63,7 @@ class Server:
             data = []
         return data
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> Mapping:
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
         dataset = self.dataset()
         rows = self.get_page(page=page, page_size=page_size)
         max_page_num = len(dataset) // page_size + 1
