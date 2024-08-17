@@ -63,13 +63,13 @@ class Server:
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Mapping:
         dataset = self.dataset()
         rows = self.get_page(page=page, page_size=page_size)
-        max_page_num = len(dataset) // page_size
+        max_page_num = math.ceil(len(dataset) // page_size)
         return {
             "page_size": len(rows),
             "page": page,
             "data": rows,
             "next_page": page + 1 if page + 1 <= max_page_num else None,
-            "prev_page": page if page - 1 > 0 else None,
+            "prev_page": page - 1 if page - 1 > 0 else None,
             "total_pages": max_page_num
         }
 
