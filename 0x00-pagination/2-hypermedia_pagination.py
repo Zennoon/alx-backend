@@ -17,8 +17,6 @@ import csv
 import math
 from typing import List, Mapping, Tuple
 
-index_range = __import__('0-simple_helper_function').index_range
-
 
 class Server:
     """Server class to paginate a database of popular baby names.
@@ -77,3 +75,24 @@ class Server:
             "prev_page": page - 1 if page - 1 else None,
             "total_pages": max_page_num
         }
+
+
+def index_range(page: int, page_size: int) -> Tuple[int, int]:
+    """
+    A helper function for pagination that receives
+    a page number and page size, and returns the start and end index
+    for that page.
+
+    Args:
+        page (int): The page number
+        page_size (int): The amount of records that can be displayed
+        at a time
+
+    Returns:
+        (tuple): The start and end index for the records to be displayed
+        on the page
+    """
+    start_index = (page - 1) * page_size
+    end_index = start_index + page_size
+    return (start_index, end_index)
+
