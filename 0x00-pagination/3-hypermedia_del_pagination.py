@@ -47,7 +47,7 @@ class Server:
                         page_size: int = 10) -> Dict:
         """
         Retrieves items from the dataset with delete resiliency
-        
+
         Args:
             index (int): The start index from which to retrieve data
             page_size (int): Size of the page
