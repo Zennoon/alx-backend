@@ -56,9 +56,8 @@ class Server:
             (dict): Dictionary containing hypermedia
         """
         dataset = self.indexed_dataset()
-        idx = index or 0
-        assert (isinstance(idx, int)
-                and idx >= 0
+        idx = index
+        assert (idx >= 0
                 and idx < len(dataset))
         data: List[List] = []
         return_dict: Dict = {
