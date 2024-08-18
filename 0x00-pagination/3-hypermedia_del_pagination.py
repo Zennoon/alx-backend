@@ -8,7 +8,7 @@ Contains:
 """
 import csv
 import math
-from typing import List, Dict, Union
+from typing import List, Dict
 
 
 class Server:
@@ -43,7 +43,7 @@ class Server:
         return self.__indexed_dataset
 
     def get_hyper_index(self,
-                        index: Union[int, None] = None,
+                        index: int = None,
                         page_size: int = 10) -> Dict:
         """
         Retrieves items from the dataset with delete resiliency
@@ -66,10 +66,11 @@ class Server:
             if dataset.get(idx):
                 if len(data) == page_size:
                     break
+                if return_dict.get("index") is None:
+                    return_dict["index"] = idx
                 data.append(dataset[idx])
             idx += 1
         return_dict.update({
-            "index": index,
             "data": data,
             "page_size": len(data),
             "next_index": idx
