@@ -41,34 +41,30 @@ class Server:
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """
-        Takes 2 integer arguments and returns a dictionary with
-        the following key-value pairs:
-            index: index of the first item in the current page
-            next_index: index of the first item in the next page
-            page_size: the current page size
-            data: actual page of the dataset
+        Retrieves items from the dataset with delete resiliency
+
         Args:
-            index(int): first required index
-            page_size(int): required number of records per page
+            index (int): The start index from which to retrieve data
+            page_size (int): Size of the page
+
+        Returns:
+            (dict): Dictionary containing hypermedia
         """
         dataset = self.indexed_dataset()
-        data_length = len(dataset)
-        assert 0 <= index < data_length
-        response = {}
-        data = []
-        response['index'] = index
-        for i in range(page_size):
-            while True:
-                curr = dataset.get(index)
-                index += 1
-                if curr is not None:
-                    break
-            data.append(curr)
-
-        response['data'] = data
-        response['page_size'] = len(data)
-        if dataset.get(index):
-            response['next_index'] = index
-        else:
-            response['next_index'] = None
-        return response
+        idx = index
+        assert (idx >= 0
+                and idx < len(dataset))
+        data: List[List] = []
+        return_dict: Dict = {
+            "index": index
+        }
+        while idx < len(dataset) and len(data) < page_size:
+            if dataset.get(idx):
+                data.append(dataset[idx])
+            idx += 1
+        return_dict.update({
+            "data": data,
+            "page_size": len(data),
+            "next_index": idx if dataset.get(idx) else None
+        })
+        return return_dict
