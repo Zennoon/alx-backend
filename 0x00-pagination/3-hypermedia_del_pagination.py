@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Deletion-resilient hypermedia pagination
+Contains:
+    Classes
+    =======
+    Server - Mock server offering pagination
+    with deletion safety
 """
-
 import csv
 import math
-from typing import List, Dict
+from typing import List, Dict, Union
 
 
 class Server:
@@ -39,7 +42,9 @@ class Server:
             }
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
+    def get_hyper_index(self,
+                        index: Union[int, None] = None,
+                        page_size: int = 10) -> Dict:
         """
         Retrieves items from the dataset with delete resiliency
 
@@ -51,20 +56,22 @@ class Server:
             (dict): Dictionary containing hypermedia
         """
         dataset = self.indexed_dataset()
-        idx = index
-        assert (idx >= 0
-                and idx < len(dataset))
+        idx = index or 0
+        assert (isinstance(idx, int)
+                and idx >= 0
+                and idx < len(dataset) + page_size)
         data: List[List] = []
-        return_dict: Dict = {
-            "index": index
-        }
-        while idx < len(dataset) and len(data) < page_size:
+        return_dict: Dict = {}
+        while idx < len(dataset):
             if dataset.get(idx):
+                if len(data) == page_size:
+                    break
                 data.append(dataset[idx])
             idx += 1
         return_dict.update({
+            "index": index,
             "data": data,
             "page_size": len(data),
-            "next_index": idx if dataset.get(idx) else None
+            "next_index": idx
         })
         return return_dict
