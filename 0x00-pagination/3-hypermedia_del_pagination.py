@@ -8,7 +8,7 @@ Contains:
 """
 import csv
 import math
-from typing import List, Dict, Union
+from typing import List, Dict
 
 
 class Server:
@@ -42,9 +42,7 @@ class Server:
             }
         return self.__indexed_dataset
 
-    def get_hyper_index(self,
-                        index: Union[int, None] = None,
-                        page_size: int = 10) -> Dict:
+    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """
         Retrieves items from the dataset with delete resiliency
 
