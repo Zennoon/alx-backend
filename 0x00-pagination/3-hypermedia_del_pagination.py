@@ -56,20 +56,23 @@ class Server:
             (dict): Dictionary containing hypermedia
         """
         dataset = self.indexed_dataset()
-        idx = index
-        assert (idx >= 0
-                and idx < len(dataset))
-        data: List[List] = []
-        return_dict: Dict = {
-            "index": index
-        }
-        while idx < len(dataset) and len(data) < page_size:
-            if dataset.get(idx):
-                data.append(dataset[idx])
-            idx += 1
-        return_dict.update({
-            "data": data,
-            "page_size": len(data),
-            "next_index": idx if dataset.get(idx) else None
-        })
-        return return_dict
+        data_length = len(dataset)
+        assert 0 <= index < data_length
+        response = {}
+        data = []
+        response['index'] = index
+        for i in range(page_size):
+            while True:
+                curr = dataset.get(index)
+                index += 1
+                if curr is not None:
+                    break
+            data.append(curr)
+
+        response['data'] = data
+        response['page_size'] = len(data)
+        if dataset.get(index):
+            response['next_index'] = index
+        else:
+            response['next_index'] = None
+        return response
