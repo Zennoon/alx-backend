@@ -53,24 +53,26 @@ class Server:
             page_size (int): Size of the page
 
         Returns:
-            dict: Dictionary containing hypermedia
+            (dict): Dictionary containing hypermedia
         """
         dataset = self.indexed_dataset()
-        index = index or 0
-        assert (isinstance(index, int)
-                and index >= 0
-                and index < len(dataset) + page_size)
-        idx = index
+        idx = index or 0
+        assert (isinstance(idx, int)
+                and idx >= 0
+                and idx < len(dataset) + page_size)
         data: List[List] = []
+        return_dict: Dict = {}
         while idx < len(dataset):
             if dataset.get(idx):
                 if len(data) == page_size:
                     break
+                if return_dict.get("index") is None:
+                    return_dict["index"] = idx
                 data.append(dataset[idx])
             idx += 1
-        return {
-            "index": index,
+        return_dict.update({
+            "data": data,
             "page_size": len(data),
-            "next_index": idx,
-            "data": data
-        }
+            "next_index": idx
+        })
+        return return_dict
