@@ -59,20 +59,18 @@ class Server:
         idx = index or 0
         assert (isinstance(idx, int)
                 and idx >= 0
-                and idx < len(dataset) + page_size)
+                and idx < len(dataset))
         data: List[List] = []
-        return_dict: Dict = {}
-        while idx < len(dataset):
+        return_dict: Dict = {
+            "index": index
+        }
+        while idx < len(dataset) and len(data) < page_size:
             if dataset.get(idx):
-                if len(data) == page_size:
-                    break
-                if return_dict.get("index") is None:
-                    return_dict["index"] = idx
                 data.append(dataset[idx])
             idx += 1
         return_dict.update({
             "data": data,
             "page_size": len(data),
-            "next_index": idx
+            "next_index": idx if dataset.get(idx) else None
         })
         return return_dict
