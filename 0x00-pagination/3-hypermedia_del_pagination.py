@@ -66,11 +66,10 @@ class Server:
             if dataset.get(idx):
                 if len(data) == page_size:
                     break
-                if return_dict.get("index") is None:
-                    return_dict["index"] = idx
                 data.append(dataset[idx])
             idx += 1
         return_dict.update({
+            "index": index,
             "data": data,
             "page_size": len(data),
             "next_index": idx
