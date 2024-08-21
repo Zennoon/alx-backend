@@ -71,7 +71,7 @@ class LFUCache(BaseCaching):
             self.keys_by_usage_order.append(key)
             self.keys_by_usage_frequency[key] += 1
         return key and self.cache_data.get(key)
-    
+
     def get_lfu_lru_key(self):
         """
         Gets the least frequently used item from the cache
@@ -79,7 +79,9 @@ class LFUCache(BaseCaching):
         If more than two or more keys have the least frequency,
         returns the least frequently used one.
         """
-        sorted_items = sorted([(val, key) for key, val in self.keys_by_usage_frequency.items()])
+        sorted_items = sorted(
+            [(val, key) for key, val in self.keys_by_usage_frequency.items()]
+            )
         lfu_keys = [sorted_items[0][1]]
         i = 1
         while i < len(sorted_items) and sorted_items[i][1] == lfu_keys[0]:
@@ -88,6 +90,7 @@ class LFUCache(BaseCaching):
 
         lfu_lru_key = lfu_keys[0]
         for key in lfu_keys:
-            if self.keys_by_usage_order.index(key) < self.keys_by_usage_order.index(lfu_lru_key):
+            key_usage_index = self.keys_by_usage_order.index(key)
+            if key_usage_index < self.keys_by_usage_order.index(lfu_lru_key):
                 lfu_lru_key = key
         return lfu_lru_key
