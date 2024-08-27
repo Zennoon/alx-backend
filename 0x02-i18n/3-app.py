@@ -7,7 +7,7 @@ Contains:
     babel - A Babel instance to support multiple languages in our app
 """
 from flask import Flask, render_template, request
-from flask_babel import Babel
+from flask_babel import Babel, gettext
 from typing import Any
 
 
@@ -35,7 +35,9 @@ def get_locale() -> Any:
 @app.route("/")
 def index() -> Any:
     """Handles the root (/) route"""
-    return render_template("2-index.html")
+    return render_template("3-index.html", 
+                           home_title=gettext("home_title"), 
+                           home_header=gettext("home_header"))
 
 
 if __name__ == "__main__":
