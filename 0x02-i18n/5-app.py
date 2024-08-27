@@ -44,13 +44,14 @@ def get_locale():
 
 
 def get_user():
-    """
-    Returns a user dictionary or None if ID value can't be found
-    or if 'login_as' URL parameter was not found
-    """
-    id = request.args.get('login_as', None)
-    if id is not None and int(id) in users.keys():
-        return users.get(int(id))
+    """Retrieves the user logging in"""
+    user_id_str = request.args.get("login_as")
+    if user_id_str:
+        try:
+            user_id = int(user_id_str)
+        except ValueError:
+            return None
+        return users[user_id]
     return None
 
 
