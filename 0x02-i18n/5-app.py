@@ -56,7 +56,7 @@ def get_user() -> Union[Dict, None]:
 
 
 @app.before_request
-def before_request():
+def before_request() -> None:
     """Configurations before every request"""
     g.user = get_user()
 
