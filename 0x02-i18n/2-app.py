@@ -8,6 +8,7 @@ Contains:
 """
 from flask import Flask, render_template, request
 from flask_babel import Babel
+from typing import Any
 
 
 class Config:
@@ -17,7 +18,7 @@ class Config:
     BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
-def get_locale():
+def get_locale() -> Any:
     """
     Selects most appropriate locale from the supported
     based on the request's Accept-Languages header value
@@ -31,7 +32,7 @@ babel = Babel(app, locale_selector=get_locale)
 
 
 @app.route("/")
-def index():
+def index() -> Any:
     """Handles the root (/) route"""
     return render_template("1-index.html")
 
