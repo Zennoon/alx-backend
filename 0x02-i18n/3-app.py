@@ -35,8 +35,8 @@ def get_locale() -> Any:
 @app.route("/")
 def index() -> Any:
     """Handles the root (/) route"""
-    return render_template("3-index.html", 
-                           home_title=gettext("home_title"), 
+    return render_template("3-index.html",
+                           home_title=gettext("home_title"),
                            home_header=gettext("home_header"))
 
 
