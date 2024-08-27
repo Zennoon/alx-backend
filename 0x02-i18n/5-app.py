@@ -51,7 +51,8 @@ def get_user():
             user_id = int(user_id_str)
         except ValueError:
             return None
-        return users[user_id]
+        if user_id in users.keys():
+            return users[user_id]
     return None
 
 
