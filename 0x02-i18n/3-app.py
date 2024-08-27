@@ -33,7 +33,7 @@ def get_locale() -> Any:
 
 
 @app.route("/")
-def index() -> Any:
+def index() -> str:
     """Handles the root (/) route"""
     return render_template("3-index.html",
                            home_title=gettext("home_title"),
@@ -41,4 +41,4 @@ def index() -> Any:
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=5000)
