@@ -34,7 +34,7 @@ babel = Babel(app)
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> str:
     """
     Selects most appropriate locale from the supported
     """
@@ -49,7 +49,7 @@ def get_locale():
 
 
 @babel.timezoneselector
-def get_timezone():
+def get_timezone() -> str:
     """
     Selects most appropriate timezone
     """
