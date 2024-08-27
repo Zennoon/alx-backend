@@ -56,16 +56,14 @@ def get_timezone():
     url_timezone = request.args.get("timezone")
     if url_timezone:
         try:
-            _ = timezone(url_timezone)
-            return url_timezone
+            return timezone(url_timezone).zone
         except UnknownTimeZoneError:
             pass
     if g.user:
         user_timezone = g.user.get("timezone")
         if user_timezone:
             try:
-                _ = timezone(url_timezone)
-                return user_timezone
+                return timezone(url_timezone).zone
             except UnknownTimeZoneError:
                 pass
     return app.config["BABEL_DEFAULT_TIMEZONE"]
