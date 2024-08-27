@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
 """
-Flask app
+Contains:
+    Module-level
+    ============
+    app - A flask application
+    babel - A Babel instance to support multiple languages in our app
 """
-from flask import (
-    Flask,
-    render_template,
-    request
-)
-from flask_babel import Babel
+from flask import Flask, render_template, request
+from flask_babel import Babel, gettext
+from typing import Any
 
 
-class Config(object):
-    """
-    Configuration for Babel
-    """
+class Config:
+    """Configuration for the flask application"""
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
@@ -25,20 +24,19 @@ babel = Babel(app)
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> Any:
     """
-    Select and return best language match based on supported languages
+    Selects most appropriate locale from the supported
+    based on the request's Accept-Languages header value
     """
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+    return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
-@app.route('/', strict_slashes=False)
-def index() -> str:
-    """
-    Handles / route
-    """
-    return render_template('3-index.html')
+@app.route("/")
+def index() -> Any:
+    """Handles the root (/) route"""
+    return render_template("3-index.html")
 
 
 if __name__ == "__main__":
-    app.run(port="5000", host="0.0.0.0", debug=True)
+    app.run()
