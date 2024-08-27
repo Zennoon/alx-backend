@@ -43,15 +43,14 @@ def get_locale():
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
-def get_user() -> Union[Dict, None]:
-    """Retrieves the user logging in"""
-    user_id = request.args.get("login_as")
-    if user_id:
-        try:
-            user_id = int(user_id)
-        except ValueError:
-            return None
-        return users[user_id]
+def get_user():
+    """
+    Returns a user dictionary or None if ID value can't be found
+    or if 'login_as' URL parameter was not found
+    """
+    id = request.args.get('login_as', None)
+    if id is not None and int(id) in users.keys():
+        return users.get(int(id))
     return None
 
 
