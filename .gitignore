@@ -3,3 +3,4 @@ __pycache__
 .mypy_cache
 *.csv
 env
+node_modules
